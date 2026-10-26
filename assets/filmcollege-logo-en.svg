@@ -1,0 +1,16 @@
+<svg width="360" height="80" viewBox="0 0 360 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">New Film College</title>
+  <desc id="desc">English wordmark for New Film College with the original bird mark.</desc>
+  <defs>
+    <clipPath id="birdCrop"><rect width="28" height="36"/></clipPath>
+    <style>
+      @font-face{font-family:FilmGeologica;src:url('filmcollege-geologica-bold.ttf') format('truetype');font-weight:700}
+      .wordmark{font-family:FilmGeologica,Geologica,Arial,sans-serif;font-weight:700;letter-spacing:-1.5px;fill:#191919}
+    </style>
+  </defs>
+  <g transform="translate(2 8) scale(1.75)" clip-path="url(#birdCrop)">
+    <image href="filmcollege-logo.svg" width="151" height="36"/>
+  </g>
+  <text class="wordmark" x="62" y="34" font-size="29">NEW</text>
+  <text class="wordmark" x="62" y="67" font-size="29">FILM COLLEGE</text>
+</svg>

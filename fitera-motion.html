@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fitera — connected coaching</title>
+  <style>
+    :root { --coral:#f9c0b9; --ease:cubic-bezier(.16,1,.3,1); }
+    * { box-sizing:border-box; }
+    html,body { margin:0; overflow:hidden; background:#161d5d; }
+    body { font-family:Arial,sans-serif; color:#fff; }
+    button { font:inherit; }
+
+    .film {
+      position:relative;
+      height:640px;
+      min-height:580px;
+      overflow:hidden;
+      background:
+        radial-gradient(ellipse at 76% 20%,#656ac2 0,transparent 48%),
+        radial-gradient(ellipse at 18% 100%,#9a85c0 0,transparent 46%),
+        #252d7c;
+    }
+    .film::before { content:""; position:absolute; inset:0; background:linear-gradient(115deg,transparent 45%,rgba(255,255,255,.07) 46%,transparent 70%); pointer-events:none; }
+    .copy { position:absolute; z-index:5; top:42px; left:6%; max-width:450px; pointer-events:none; }
+    .eyebrow { color:var(--coral); font-size:10px; letter-spacing:3px; text-transform:uppercase; }
+    .copy h1 { margin:16px 0; font-size:clamp(34px,4.8vw,59px); font-weight:500; letter-spacing:-3px; line-height:1.01; }
+    .copy p { max-width:290px; margin:0; color:#d5d7f2; font-size:13px; line-height:1.55; }
+    .word { display:inline-block; color:var(--coral); transition:color .45s,opacity .22s,transform .45s var(--ease); }
+    .word.is-changing { opacity:0; transform:translateY(8px); }
+
+    .scene { position:absolute; inset:0; perspective:1400px; perspective-origin:56% 44%; }
+    .floor { position:absolute; left:50%; top:54%; width:820px; height:820px; border:1px solid rgba(255,255,255,.12); border-radius:50%; box-shadow:0 0 0 76px rgba(255,255,255,.025),0 0 0 152px rgba(255,255,255,.018); transform:translate(-50%,-50%) rotateX(72deg); transition:transform .9s var(--ease),opacity .55s; }
+    .phone { position:absolute; top:138px; left:50%; width:190px; height:401px; padding:6px; border-radius:34px; background:linear-gradient(120deg,#dfdff0,#60638c 12%,#b0b2d2 47%,#484d78 85%,#dedfee); box-shadow:10px 18px 0 -6px #111746,22px 38px 42px rgba(8,15,66,.32); transform-style:preserve-3d; transition:transform .85s var(--ease),opacity .42s,filter .42s; will-change:transform,opacity; }
+    .phone::before { content:""; position:absolute; z-index:4; inset:4px; border:1px solid rgba(255,255,255,.5); border-radius:30px; pointer-events:none; }
+    .phone::after { content:""; position:absolute; right:-2px; top:92px; width:3px; height:38px; border-radius:2px; background:#cacde7; }
+    .glass { position:relative; height:100%; overflow:hidden; border:4px solid #121735; border-radius:28px; background:#fff; }
+    .screen { position:absolute; top:0; left:0; width:100%; }
+    .shine { position:absolute; inset:0; background:linear-gradient(115deg,rgba(255,255,255,.24),transparent 25%,transparent 65%,rgba(255,255,255,.08)); pointer-events:none; }
+    .role { position:absolute; right:0; bottom:-28px; left:0; color:#eff0ff; font-size:9px; letter-spacing:2.5px; text-align:center; text-transform:uppercase; }
+    .live-screen { width:390px; height:844px; border:0; background:#fff; pointer-events:none; transform:scale(.45); transform-origin:top left; }
+
+    .coach { transform:translateX(-52px) translateY(10px) rotateX(12deg) rotateY(-30deg) rotateZ(-14deg); }
+    .client { transform:translateX(150px) translateY(-18px) translateZ(80px) rotateX(7deg) rotateY(-24deg) rotateZ(10deg); }
+    .film[data-chapter="1"] .coach { opacity:.34; transform:translateX(-154px) translateY(92px) translateZ(-210px) rotateX(22deg) rotateY(56deg) rotateZ(-22deg) scale(.8); }
+    .film[data-chapter="1"] .client { transform:translateX(78px) translateY(4px) translateZ(265px) rotateX(-3deg) rotateY(7deg) rotateZ(-3deg); }
+    .film[data-chapter="2"] .coach { transform:translateX(46px) translateY(-12px) translateZ(190px) rotateX(-6deg) rotateY(-16deg) rotateZ(7deg); }
+    .film[data-chapter="2"] .client { opacity:.56; transform:translateX(-112px) translateY(28px) translateZ(-120px) rotateX(8deg) rotateY(30deg) rotateZ(-13deg); }
+    .film[data-chapter="1"] .floor { opacity:.34; transform:translate(-50%,-50%) rotateX(80deg) rotateZ(38deg) scale(1.34); }
+    .film[data-chapter="2"] .floor { transform:translate(-50%,-50%) rotateX(66deg) rotateZ(-28deg); }
+
+    .caption { position:absolute; z-index:6; left:6%; bottom:88px; max-width:290px; color:#dadcf4; font-size:11px; line-height:1.55; }
+    .caption strong { display:block; margin-bottom:7px; color:var(--coral); font-size:10px; font-weight:400; letter-spacing:2px; text-transform:uppercase; }
+    .controls { position:absolute; z-index:8; right:6%; bottom:24px; left:6%; display:flex; align-items:center; gap:12px; }
+    .chapters { display:flex; flex:1; gap:8px; }
+    .chapter { width:150px; padding:12px 0; border:0; border-top:2px solid rgba(255,255,255,.14); color:#c8cbed; background:none; font-size:10px; text-align:left; cursor:pointer; transition:border-color .25s,color .25s; }
+    .chapter[aria-pressed="true"] { border-color:var(--coral); color:#fff; }
+    .chapter span { margin-right:8px; color:var(--coral); }
+    .pause { padding:9px 15px; border:1px solid rgba(255,255,255,.25); border-radius:24px; color:#fff; background:rgba(255,255,255,.05); font-size:11px; cursor:pointer; }
+    button:focus-visible { outline:2px solid var(--coral); outline-offset:4px; }
+    .time { position:absolute; bottom:0; width:0; height:3px; background:var(--coral); }
+    .playing .time { animation:time 9.6s linear infinite; }
+    @keyframes time { to { width:100%; } }
+
+    @media (max-width:850px) {
+      .film { height:680px; min-height:640px; }
+      .copy { top:30px; }
+      .copy h1 { font-size:42px; }
+      .phone { top:210px; width:170px; height:359px; }
+      .live-screen { transform:scale(.4); }
+      .coach { transform:translateX(-188px) rotateY(-22deg) rotateZ(-10deg); }
+      .client { transform:translateX(26px) translateY(-10px) rotateY(-20deg) rotateZ(9deg); }
+      .film[data-chapter="1"] .coach { transform:translateX(-192px) translateY(62px) rotateY(55deg) rotateZ(-20deg) scale(.75); }
+      .film[data-chapter="1"] .client { transform:translateX(-25px) translateZ(145px) rotateY(7deg) rotateZ(-4deg); }
+      .film[data-chapter="2"] .coach { transform:translateX(-90px) translateY(-8px) translateZ(120px) rotateY(-18deg) rotateZ(7deg); }
+      .film[data-chapter="2"] .client { transform:translateX(58px) translateY(18px) rotateY(34deg) rotateZ(-12deg) scale(.8); }
+      .caption { bottom:78px; max-width:100%; font-size:10px; }
+      .caption strong { display:none; }
+      .controls { bottom:18px; }
+      .chapter { width:auto; flex:1; font-size:9px; }
+      .chapter span { display:none; }
+      .floor { top:61%; }
+    }
+
+    @media (max-width:440px) {
+      .film { height:650px; min-height:650px; }
+      .copy { top:26px; }
+      .copy h1 { margin:12px 0; font-size:36px; letter-spacing:-2px; }
+      .copy p { max-width:260px; font-size:11px; }
+      .phone { top:232px; width:135px; height:285px; padding:4px; border-radius:26px; }
+      .glass { border-width:3px; border-radius:22px; }
+      .phone::before { border-radius:23px; }
+      .live-screen { transform:scale(.32); }
+      .coach { transform:translateX(-145px) rotateY(-28deg) rotateZ(-12deg); }
+      .client { transform:translateX(4px) translateY(-10px) rotateY(-19deg) rotateZ(11deg); }
+      .film[data-chapter="1"] .coach { transform:translateX(-150px) translateY(55px) rotateY(58deg) rotateZ(-23deg) scale(.72); }
+      .film[data-chapter="1"] .client { transform:translateX(-55px) translateZ(115px) rotateY(5deg) rotateZ(-4deg); }
+      .film[data-chapter="2"] .coach { transform:translateX(-82px) translateZ(100px) rotateY(-14deg) rotateZ(8deg); }
+      .film[data-chapter="2"] .client { transform:translateX(28px) translateY(24px) rotateY(36deg) rotateZ(-14deg) scale(.72); }
+      .caption { bottom:72px; }
+      .controls { gap:8px; }
+      .pause { padding:8px 10px; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      * { transition:none!important; animation:none!important; }
+      .time { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="film" data-chapter="0" aria-label="Fitera animated product presentation">
+    <div class="copy">
+      <div class="eyebrow">Fitera / product in motion</div>
+      <h1>Two perspectives.<br><span class="word" id="motion-word">One shared rhythm.</span></h1>
+      <p>From a coach’s plan to a client’s next step. Connected by design.</p>
+    </div>
+    <div class="scene">
+      <div class="floor"></div>
+      <div class="phone coach">
+        <div class="glass"><iframe class="screen live-screen" data-role="coach" src="motion-screens/coach-connect.html" title="Latest Fitera coach interface" tabindex="-1"></iframe><div class="shine"></div></div>
+        <div class="role">Coach / guide</div>
+      </div>
+      <div class="phone client">
+        <div class="glass"><iframe class="screen live-screen" data-role="client" src="motion-screens/client-connect.html" title="Latest Fitera client interface" tabindex="-1"></iframe><div class="shine"></div></div>
+        <div class="role">Client / move</div>
+      </div>
+    </div>
+    <div class="caption" aria-live="polite"><strong id="label">01 / Connected roles</strong><span id="description">Planning and daily training, designed as one connected experience.</span></div>
+    <div class="controls">
+      <div class="chapters" aria-label="Presentation scenes">
+        <button class="chapter" aria-pressed="true" data-scene="0"><span>01</span>Two roles</button>
+        <button class="chapter" aria-pressed="false" data-scene="1"><span>02</span>Daily action</button>
+        <button class="chapter" aria-pressed="false" data-scene="2"><span>03</span>Visible progress</button>
+      </div>
+      <button class="pause" aria-label="Pause animation">Pause ↗</button>
+    </div>
+    <div class="time"></div>
+  </main>
+  <script>
+    const film = document.querySelector('.film');
+    const buttons = [...document.querySelectorAll('.chapter')];
+    const pause = document.querySelector('.pause');
+    const word = document.querySelector('#motion-word');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const steps = ['connect','train','review'];
+    const labels = ['01 / Connected roles','02 / A clear next step','03 / Progress in context'];
+    const headlines = ['One shared rhythm.','One clear next step.','Progress in context.'];
+    const descriptions = [
+      'Planning and daily training, designed as one connected experience.',
+      'A focused daily dashboard makes the next workout easy to find.',
+      'Training history and body measurements bring progress into view.'
+    ];
+    let chapter = 0;
+    let playing = !reduced.matches;
+    let visible = true;
+    let scrollDriving = false;
+    let timer = null;
+    let resumeTimer = null;
+    let headlineTimer = null;
+
+    function show(index) {
+      const next = Math.max(0,Math.min(2,index));
+      if (next === chapter && film.dataset.ready === 'true') return;
+      chapter = next;
+      film.dataset.ready = 'true';
+      film.dataset.chapter = String(next);
+      document.querySelectorAll('.live-screen').forEach(frame => {
+        const nextSource = `motion-screens/${frame.dataset.role}-${steps[next]}.html`;
+        if (!frame.src.endsWith(nextSource)) frame.src = nextSource;
+      });
+      buttons.forEach((button,buttonIndex) => button.setAttribute('aria-pressed',String(buttonIndex === next)));
+      document.querySelector('#label').textContent = labels[next];
+      document.querySelector('#description').textContent = descriptions[next];
+      clearTimeout(headlineTimer);
+      word.classList.add('is-changing');
+      headlineTimer = setTimeout(() => {
+        word.textContent = headlines[next];
+        word.classList.remove('is-changing');
+      }, reduced.matches ? 0 : 150);
+    }
+
+    function syncAutoplay() {
+      clearInterval(timer);
+      const running = playing && visible && !scrollDriving && !reduced.matches;
+      film.classList.toggle('playing',running);
+      pause.textContent = playing ? 'Pause ↗' : 'Play ↗';
+      pause.setAttribute('aria-label',playing ? 'Pause animation' : 'Play animation');
+      if (running) timer = setInterval(() => show((chapter + 1) % 3),3200);
+    }
+
+    function getHostFrame() {
+      try { return window.frameElement; } catch (error) { return null; }
+    }
+
+    function updateFromParentScroll() {
+      const frame = getHostFrame();
+      if (!frame) return;
+      const rect = frame.getBoundingClientRect();
+      const viewport = window.parent.innerHeight || 800;
+      visible = rect.bottom > viewport * .08 && rect.top < viewport * .92;
+      if (!visible || reduced.matches) { syncAutoplay(); return; }
+      const start = viewport * .78;
+      const end = -rect.height * .12;
+      const progress = Math.max(0,Math.min(1,(start - rect.top) / (start - end)));
+      const next = progress < .34 ? 0 : progress < .68 ? 1 : 2;
+      scrollDriving = true;
+      show(next);
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { scrollDriving = false; syncAutoplay(); },700);
+      syncAutoplay();
+    }
+
+    buttons.forEach(button => button.addEventListener('click',() => {
+      playing = false;
+      scrollDriving = false;
+      show(Number(button.dataset.scene));
+      syncAutoplay();
+    }));
+    pause.addEventListener('click',() => { playing = !playing; scrollDriving = false; syncAutoplay(); });
+    document.addEventListener('visibilitychange',() => { visible = !document.hidden; syncAutoplay(); });
+    reduced.addEventListener('change',() => { playing = !reduced.matches; syncAutoplay(); });
+
+    show(0);
+    const frame = getHostFrame();
+    if (frame) {
+      window.parent.addEventListener('scroll',updateFromParentScroll,{ passive:true });
+      window.parent.addEventListener('resize',updateFromParentScroll,{ passive:true });
+      updateFromParentScroll();
+    }
+    syncAutoplay();
+  </script>
+</body>
+</html>
