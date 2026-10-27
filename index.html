@@ -23,6 +23,18 @@
       --quiet: #77736c;
       --blue: #3146dc;
       --card: #e7e3dd;
+      --layout-max: 1440px;
+      --gutter: clamp(20px, 2.65vw, 38px);
+      --grid-gap: clamp(18px, 2vw, 28px);
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 20px;
+      --space-lg: 32px;
+      --space-xl: 48px;
+      --space-2xl: 72px;
+      --space-3xl: 96px;
+      --section-y: clamp(88px, 8vw, 124px);
+      --rule: #d1cdc6;
     }
 
     * {
@@ -38,7 +50,7 @@
     body {
       font-family: Manrope, Arial, sans-serif;
       color: var(--ink);
-      letter-spacing: -0.045em;
+      letter-spacing: -0.015em;
       overflow-x: hidden;
     }
 
@@ -69,9 +81,9 @@
     }
 
     .wrap {
-      width: min(1440px, 100%);
+      width: min(var(--layout-max), 100%);
       margin: auto;
-      padding: 0 34px;
+      padding-inline: var(--gutter);
     }
 
     /* Navigation */
@@ -158,8 +170,8 @@
 
     /* Hero */
     .hero {
-      min-height: 100vh;
-      padding: 190px 0 100px;
+      min-height: 0;
+      padding: clamp(128px,10vw,150px) 0 clamp(64px,6vw,88px);
       background: var(--paper);
       position: relative;
       overflow: hidden;
@@ -173,68 +185,44 @@
 
     .hero-kicker {
       display: flex;
-      gap: 18px;
+      gap: 10px 22px;
       flex-wrap: wrap;
-      font-family: "DM Mono", monospace;
-      font-size: 10px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.035em;
       color: var(--quiet);
-      margin-bottom: 18px;
+      margin-bottom: 26px;
       opacity: 0;
       animation: fadeInUp 0.8s ease-out 0s forwards;
     }
 
-    .hero-label {
-      color: var(--quiet);
-      font-size: 12px;
-      margin-bottom: 24px;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      opacity: 0;
-      animation: fadeInUp 0.8s ease-out 0.1s forwards;
-    }
+    .hero-kicker span + span::before { content:"·"; margin-right:22px; color:#b1ada5; }
 
     .hero h1 {
-      font-size: clamp(52px, 8vw, 96px);
+      font-size: clamp(52px, 7.25vw, 100px);
       font-weight: 500;
-      letter-spacing: -0.03em;
-      line-height: 0.94;
+      letter-spacing: -0.045em;
+      line-height: 0.93;
       padding-bottom: 0.06em;
-      margin-bottom: 16px;
+      margin-bottom: 26px;
       overflow: visible;
-      max-width: 900px;
-    }
-
-    .hero h1 span {
-      display: inline-block;
+      max-width: 1120px;
       opacity: 0;
-      animation: slideUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    }
-
-    .hero h1 span:nth-child(1) { animation-delay: 0.15s; }
-    .hero h1 span:nth-child(2) { animation-delay: 0.25s; }
-    .hero h1 span:nth-child(3) { animation-delay: 0.35s; }
-
-    /* "messy" -> settles into order, visualising the brief going from chaos to clarity.
-       Only `transform` is animated here (never margin/width/letter-spacing) so the
-       browser's line-wrapping is computed once and never reflows mid-animation. */
-    #messyWord .chaos-letter {
-      display: inline-block;
-      transform: translate(var(--tx, 0px), var(--ty, 0px)) rotate(var(--rot, 0deg));
-      transition: transform 0.72s cubic-bezier(0.34, 1.2, 0.64, 1);
+      animation: fadeInUp .8s ease-out .1s forwards;
     }
 
     .hero-tagline {
-      font-size: clamp(18px, 2.5vw, 28px);
+      font-size: clamp(18px, 2.15vw, 26px);
       font-weight: 400;
-      letter-spacing: -0.05em;
-      line-height: 1.35;
+      letter-spacing: -0.035em;
+      line-height: 1.4;
       color: #5f5b55;
-      max-width: 700px;
-      margin-bottom: 32px;
+      max-width: 760px;
+      margin-bottom: 34px;
       opacity: 0;
-      animation: fadeInUp 0.8s ease-out 0.5s forwards;
+      animation: fadeInUp 0.8s ease-out 0.22s forwards;
     }
 
     .hero-skills {
@@ -248,53 +236,10 @@
 
     .hero-cta {
       display: flex;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
       opacity: 0;
-      animation: fadeInUp 0.8s ease-out 0.7s forwards;
-    }
-
-    .hero-links {
-      display: flex;
-      gap: 22px;
-      margin-top: 26px;
-      opacity: 0;
-      animation: fadeInUp 0.8s ease-out 0.85s forwards;
-    }
-
-    .hero-links a {
-      font-size: 13px;
-      color: var(--quiet);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      padding-bottom: 2px;
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    .hero-links a:hover {
-      color: var(--blue);
-      border-color: var(--blue);
-    }
-
-    .scroll-cue {
-      position: absolute;
-      bottom: 36px;
-      left: 0;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: "DM Mono", monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--quiet);
-      opacity: 0;
-      animation: fadeInUp 0.8s ease-out 1.1s forwards;
-    }
-
-    @media (max-width: 768px) {
-      .scroll-cue { display: none; }
+      animation: fadeInUp 0.8s ease-out 0.34s forwards;
     }
 
     @keyframes slideUp {
@@ -350,49 +295,9 @@
       border-color: var(--ink);
     }
 
-    /* Marquee */
-    .marquee-section {
-      overflow: hidden;
-      background: var(--ink);
-      color: var(--paper);
-      padding: 40px 0;
-      width: 100vw;
-      margin: 40px calc(50% - 50vw) 0;
-    }
-
-    .marquee {
-      display: flex;
-      gap: 40px;
-      animation: scroll 20s linear infinite;
-      width: fit-content;
-    }
-
-    .marquee-item {
-      font-size: 22px;
-      font-weight: 600;
-      font-style: italic;
-      text-transform: uppercase;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .marquee-dot {
-      font-size: 14px;
-      opacity: 0.4;
-      flex-shrink: 0;
-    }
-
-
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
     /* Selected Work */
     .selected-work {
-      padding-top: 100px;
-      padding-bottom: 100px;
+      padding-block: var(--section-y);
     }
 
     #work, #about { scroll-margin-top:90px; }
@@ -408,8 +313,8 @@
     .cases-grid {
       display: grid;
       grid-template-columns: repeat(12, minmax(0,1fr));
-      gap: 72px 28px;
-      margin-bottom: 56px;
+      gap: var(--space-2xl) var(--grid-gap);
+      margin-bottom: var(--space-xl);
     }
 
     .cases-grid .case-card { grid-column: span 6; }
@@ -524,37 +429,35 @@
       color: var(--ink);
     }
 
-    .section-head { display:flex; align-items:end; justify-content:space-between; gap:40px; margin-bottom:60px; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:var(--space-xl); margin-bottom:var(--space-xl); padding-top:var(--space-md); border-top:1px solid var(--rule); }
     .section-head .section-title { margin-bottom:0; }
     .section-head p { max-width:460px; margin:0; color:var(--quiet); font-size:14px; line-height:1.6; letter-spacing:-.025em; }
 
     .case-meta {
-      font-size: 12px;
-      color: var(--quiet);
-      font-family: "DM Mono", monospace;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
+      display:none;
     }
 
     .case-status {
       display: inline-block;
-      font-size: 10px;
-      font-family: "DM Mono", monospace;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--blue);
-      border: 1px solid var(--blue);
-      padding: 3px 8px;
-      margin-bottom: 12px;
+      margin-bottom:10px;
+      padding:0;
+      border:0;
+      color:var(--quiet);
+      font-family:inherit;
+      font-size:11px;
+      font-weight:500;
+      letter-spacing:.015em;
     }
 
     .case-description {
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 15px;
+      line-height: 1.55;
+      letter-spacing: -0.015em;
       color: #5f5b55;
       max-width: 500px;
     }
+
+    .case-description strong { font-weight:500; }
 
     /* Reveal on scroll */
     .case-card {
@@ -569,7 +472,7 @@
 
     /* What I Do */
     .what-i-do {
-      padding: 100px 0;
+      padding-block: var(--section-y);
       background: var(--card);
       margin-left: calc(-50vw + 50%);
       margin-right: calc(-50vw + 50%);
@@ -584,8 +487,8 @@
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      gap: 32px;
-      padding: 34px 0;
+      gap: var(--space-lg);
+      padding: var(--space-lg) 0;
       border-bottom: 1px solid #d7d3cb;
       opacity: 0;
       animation: fadeInUp 0.6s ease-out forwards;
@@ -634,7 +537,7 @@
 
     .skills-name {
       font-size: clamp(24px, 3.4vw, 36px);
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: -0.02em;
       transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
       white-space: nowrap;
@@ -677,14 +580,13 @@
 
     /* About */
     .about {
-      padding-top: 124px;
-      padding-bottom: 110px;
+      padding-block: var(--section-y);
     }
 
-    .about-head { display:grid; grid-template-columns:.42fr 1.58fr; gap:34px; align-items:end; margin-bottom:38px; padding-top:20px; border-top:1px solid #cfcac1; }
+    .about-head { display:grid; grid-template-columns:.42fr 1.58fr; gap:var(--grid-gap); align-items:end; margin-bottom:var(--space-lg); padding-top:var(--space-md); border-top:1px solid var(--rule); }
     .about-head span { color:#5f5b55; font:10px/1.3 "DM Mono",monospace; letter-spacing:.08em; text-transform:uppercase; }
-    .about-head h2 { margin:0; font-size:clamp(68px,9vw,126px); font-weight:500; line-height:.78; letter-spacing:-.07em; }
-    .about-core { display:grid; grid-template-columns:minmax(330px,.82fr) minmax(0,1.18fr); gap:24px; align-items:stretch; }
+    .about-head h2 { margin:0; font-size:clamp(68px,9vw,126px); font-weight:500; line-height:.82; letter-spacing:-.045em; }
+    .about-core { display:grid; grid-template-columns:minmax(330px,.82fr) minmax(0,1.18fr); gap:var(--grid-gap); align-items:stretch; }
 
     .about-image {
       width: 100%;
@@ -700,7 +602,7 @@
 
     .about-proof { display:grid; align-content:space-between; padding:32px; color:#f3f1ed; background:#171716 !important; }
     .about-proof-top { color:#b9b4aa; font:10px "DM Mono",monospace; letter-spacing:.07em; text-transform:uppercase; }
-    .about-proof strong { display:block; max-width:390px; font-size:clamp(36px,4.4vw,62px); font-weight:500; line-height:.88; letter-spacing:-.06em; }
+    .about-proof strong { display:block; max-width:390px; font-size:clamp(36px,4.4vw,62px); font-weight:500; line-height:.9; letter-spacing:-.04em; }
     .about-proof-grid { display:grid; grid-template-columns:repeat(3,1fr); margin-top:42px; border-top:1px solid rgba(255,255,255,.18); }
     .about-proof-grid span { min-width:0; padding:14px 14px 0; color:#b9b4aa; border-right:1px solid rgba(255,255,255,.18); font:9px/1.45 "DM Mono",monospace; text-transform:uppercase; letter-spacing:.05em; }
     .about-proof-grid span:first-child { padding-left:0; }
@@ -728,11 +630,11 @@
     .about-meta { display:grid; grid-template-columns:auto 1fr auto 1fr; gap:12px 20px; align-items:baseline; margin-top:28px; padding-top:18px; border-top:1px solid #d5d0c7; }
     .about-meta span { color:#79736b; font:9px/1.3 "DM Mono",monospace; letter-spacing:.07em; text-transform:uppercase; }
     .about-meta strong { font-size:13px; font-weight:500; }
-    .about-toolkit { max-width:none; margin-top:24px; padding-top:0; border-top:0; }
+    .about-toolkit { max-width:none; margin-top:var(--grid-gap); padding-top:0; border-top:0; }
     .about-toolkit > span { display:block; margin-bottom:15px; color:#26231f; font:9px/1.3 "DM Mono",monospace; letter-spacing:.07em; text-transform:uppercase; }
     .about-toolkit-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; border-top:1px solid #d5d0c7; border-left:1px solid #d5d0c7; }
-    .about-toolkit-grid div { min-height:150px; padding:20px; border-right:1px solid #d5d0c7; border-bottom:1px solid #d5d0c7; }
-    .about-toolkit-grid strong { display:block; margin-bottom:10px; font-size:13px; font-weight:600; letter-spacing:-.02em; }
+    .about-toolkit-grid div { min-height:150px; padding:var(--space-md); border-right:1px solid #d5d0c7; border-bottom:1px solid #d5d0c7; }
+    .about-toolkit-grid strong { display:block; margin-bottom:10px; font-size:13px; font-weight:500; letter-spacing:-.02em; }
     .about-toolkit-grid p { margin:0; color:#69645d; font-size:11px; line-height:1.55; }
 
     @media (max-width:1000px) {
@@ -2619,9 +2521,10 @@
 
     /* Contact */
     .contact-section {
-      padding-top: 100px;
-      padding-bottom: 100px;
+      padding-block: var(--section-y);
     }
+
+    .contact-section .section-title { margin-bottom:var(--space-md); }
 
     .contact-actions {
       display: flex;
@@ -2637,8 +2540,14 @@
       }
 
       .hero {
-        padding: 80px 0 60px;
+        padding: 96px 0 52px;
       }
+
+      .hero-kicker { display:block; margin-bottom:20px; }
+      .hero-kicker span { display:block; }
+      .hero-kicker span + span { margin-top:6px; }
+      .hero-kicker span + span::before { display:none; }
+      .hero h1 { margin-bottom:22px; }
 
       .hero-cta {
         flex-direction: column;
@@ -2677,9 +2586,12 @@
     }
 
     @media (max-width: 640px) {
-      .wrap { padding-left:18px; padding-right:18px; }
+      :root { --gutter:18px; --section-y:80px; }
       .nav-links { gap:0; }
       .nav-links > a:not(.nav-cta) { display:none; }
+      .case-back-fixed { left:calc(var(--gutter) + 150px); justify-content:center; width:38px; height:38px; padding:0; font-size:0; }
+      .case-back-fixed::after { content:"←"; font:16px/1 Manrope,Arial,sans-serif; }
+      .case-back-fixed:hover { transform:none; }
     }
 
     /* Paired coach + client product prototype */
@@ -3411,6 +3323,38 @@
     .project-next strong { font-size:clamp(30px,5vw,64px); font-weight:500; letter-spacing:-.055em; }
     .project-next-arrow { display:grid; place-items:center; width:74px; height:74px; border:1px solid color-mix(in srgb,var(--project-ink) 22%,transparent); border-radius:50%; font-size:30px; font-style:normal; transition:transform .3s,background .3s,color .3s; }
     .project-next:hover .project-next-arrow { transform:translateX(8px); color:var(--project-bg); background:var(--project-ink); }
+    .related-work { padding-block:var(--section-y); color:var(--ink); background:var(--paper); }
+    .related-work-head { display:flex; align-items:end; justify-content:space-between; gap:var(--space-lg); margin-bottom:var(--space-lg); padding-top:var(--space-md); border-top:1px solid var(--rule); }
+    .related-work-head h2 { margin:0; font-size:clamp(38px,5vw,66px); font-weight:500; line-height:.92; letter-spacing:-.055em; }
+    .related-work-head p { max-width:430px; margin:0; color:var(--quiet); font-size:14px; line-height:1.55; letter-spacing:-.02em; }
+    .related-work-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--grid-gap); }
+    .related-card { min-width:0; text-align:left; }
+    .related-card-media { position:relative; aspect-ratio:4 / 3; margin-bottom:16px; overflow:hidden; background:var(--card); }
+    .related-card-media img { display:block; width:100%; height:100%; object-fit:cover; filter:saturate(.8); transition:transform .45s cubic-bezier(.22,1,.36,1),filter .35s; }
+    .related-card:hover .related-card-media img { transform:scale(1.025); filter:saturate(1); }
+    .related-card-index { position:absolute; top:12px; left:12px; display:grid; place-items:center; width:31px; height:31px; color:#fff; background:rgba(17,17,17,.66); backdrop-filter:blur(10px); font:9px "DM Mono",monospace; }
+    .related-card strong { display:block; margin-bottom:5px; font-size:clamp(20px,2vw,29px); font-weight:500; line-height:1.02; letter-spacing:-.04em; }
+    .related-card > span { display:block; color:var(--quiet); font-size:11px; font-weight:600; line-height:1.35; letter-spacing:.01em; }
+    .case-back-fixed {
+      position:fixed;
+      z-index:51;
+      top:21px;
+      left:calc(var(--gutter,34px) + 170px);
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      margin:0;
+      padding:10px 14px;
+      color:#171716 !important;
+      background:rgba(243,241,237,.9) !important;
+      border:1px solid rgba(23,23,22,.22) !important;
+      border-radius:999px;
+      box-shadow:0 8px 28px rgba(23,23,22,.09);
+      backdrop-filter:blur(12px);
+      transition:color .2s,background .2s,transform .2s;
+    }
+    .case-back-fixed:hover { gap:9px; color:#fff !important; background:#171716 !important; transform:translateY(-1px); }
+    .fit-section[id], .fit-hero-top[id] { scroll-margin-top:110px; }
     .project-reveal { opacity:0; transform:translateY(26px); transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1); }
     .project-reveal.is-visible { opacity:1; transform:none; }
 
@@ -3689,6 +3633,14 @@
       .project-signature-card h3,.project-signature--beauty .project-signature-card:first-child h3 { margin-top:92px; }
       .project-type-stage { min-height:360px; padding:25px; }
       .project-next-arrow { width:58px; height:58px; }
+      .related-work { padding-top:72px; padding-bottom:76px; }
+      .related-work-head { display:block; }
+      .related-work-head p { margin-top:14px; }
+      .related-work-grid { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:min(82vw,360px); gap:14px; margin-right:-20px; padding-right:20px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+      .related-work-grid::-webkit-scrollbar { display:none; }
+      .related-card { scroll-snap-align:start; }
+      .related-card-media { aspect-ratio:4 / 3; }
+      .case-back-fixed { top:14px; left:calc(var(--gutter,18px) + 146px); padding:9px 12px; }
     }
     @media (max-width:900px) {
       .bf-hero,.production-hero { min-height:auto; padding-top:130px; }
@@ -4332,100 +4284,15 @@
     <section class="hero" id="top">
       <div class="hero-content wrap">
         <div class="hero-kicker">
-          <span>Product design · Visual systems</span>
-          <span>6 years from concept to handoff</span>
+          <span>UI/UX Designer · Based in Israel</span>
+          <span>6 years across product design and visual systems</span>
         </div>
-        <div class="hero-label">UI/UX Designer · Based in Israel</div>
-        <h1>
-          <span>I turn</span>
-          <span id="messyWord">complex systems</span>
-          <span>into clear, vivid products.</span>
-        </h1>
-        <script>
-          (function () {
-            var el = document.getElementById('messyWord');
-            if (!el) return;
-            var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (reduceMotion) return;
-
-            function rnd(a, b) { return (Math.random() * (b - a) + a); }
-
-            var text = el.textContent;
-            el.textContent = '';
-            var letters = [];
-
-            text.split('').forEach(function (ch) {
-              var span = document.createElement('span');
-              span.className = 'chaos-letter';
-              span.textContent = ch === ' ' ? '\u00A0' : ch;
-              el.appendChild(span);
-              letters.push(span);
-            });
-
-            function setWaypoint(span, tx, ty, rot) {
-              span.style.setProperty('--tx', tx.toFixed(1) + 'px');
-              span.style.setProperty('--ty', ty.toFixed(1) + 'px');
-              span.style.setProperty('--rot', rot.toFixed(1) + 'deg');
-            }
-
-            // Waypoint 0: scattered, right away, before first paint settles
-            letters.forEach(function (span) {
-              setWaypoint(span, rnd(-26, 26), rnd(-30, 30), rnd(-40, 40));
-            });
-
-            // Waypoint 1: jitter to a different chaotic arrangement
-            setTimeout(function () {
-              letters.forEach(function (span) {
-                setWaypoint(span, rnd(-18, 18), rnd(-20, 20), rnd(-26, 26));
-              });
-            }, 640);
-
-            // Waypoint 2: smaller wobble, almost there
-            setTimeout(function () {
-              letters.forEach(function (span) {
-                setWaypoint(span, rnd(-7, 7), rnd(-8, 8), rnd(-10, 10));
-              });
-            }, 1240);
-
-            // Final: settle into correct position, staggered letter by letter
-            letters.forEach(function (span, i) {
-              setTimeout(function () {
-                span.style.setProperty('--tx', '0px');
-                span.style.setProperty('--ty', '0px');
-                span.style.setProperty('--rot', '0deg');
-              }, 1760 + i * 56);
-            });
-          })();
-        </script>
+        <h1>I turn complex systems into clear, vivid products.</h1>
         <p class="hero-tagline">Product strategy, interaction design and visual direction — from the first flow to the final component.</p>
         <div class="hero-cta">
           <button class="button" onclick="document.getElementById('work')?.scrollIntoView(); return false;">View work</button>
-          <a class="button button-secondary" href="mailto:olga.kaganovich11@gmail.com">Get in touch</a>
           <a class="button button-secondary" href="assets/Olga-Kaganovich-CV.pdf" download>Download CV</a>
         </div>
-        <div class="hero-links">
-          <a href="mailto:olga.kaganovich11@gmail.com">Email</a>
-          <a href="#about" onclick="document.getElementById('about')?.scrollIntoView(); return false;">About & availability</a>
-        </div>
-
-        <!-- Marquee -->
-        <div class="marquee-section">
-          <div class="marquee">
-            <span class="marquee-item">Product Thinking</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">UI Systems</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Prototyping</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Motion Design</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Brand Systems</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Design-to-Code</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Product Thinking</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">UI Systems</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Prototyping</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Motion Design</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Brand Systems</span><span class="marquee-dot">·</span>
-            <span class="marquee-item">Design-to-Code</span><span class="marquee-dot">·</span>
-          </div>
-        </div>
-        <div class="scroll-cue" aria-hidden="true">↓ Scroll</div>
       </div>
     </section>
 
@@ -4449,7 +4316,7 @@
           <div class="case-title">Fitera</div>
           <div class="case-status">In development · preparing for launch</div>
           <div class="case-meta">Product Design Lead · 2025</div>
-          <div class="case-description">One connected fitness platform for coaches and clients.<br><strong>3 months · 2 connected experiences · 160+ product screens and states designed</strong></div>
+          <div class="case-description">One connected fitness platform for coaches and clients, designed from product logic through MVP handoff.</div>
         </a>
 
         <!-- Big Fish -->
@@ -4878,6 +4745,63 @@
         requestAnimationFrame(() => document.getElementById(sectionId)?.scrollIntoView({ behavior:'smooth', block:'start' }));
       },
 
+      mountMoreCases(root, currentKey) {
+        root.querySelector('.related-work')?.remove();
+        root.querySelector('.project-next')?.remove();
+        root.querySelectorAll('.back-btn').forEach(button => button.remove());
+
+        const backButton = document.createElement('button');
+        backButton.type = 'button';
+        backButton.className = 'back-btn case-back-fixed';
+        backButton.setAttribute('aria-label', 'Back to all work');
+        backButton.textContent = '← All work';
+        backButton.addEventListener('click', () => this.showPage('home'));
+        root.prepend(backButton);
+
+        const order = ['fitness', 'big-fish', 'film', 'beauty', 'romanova', 'production']
+          .filter(key => caseStudies[key]);
+        const start = Math.max(0, order.indexOf(currentKey));
+        const cards = [];
+        for (let offset = 1; offset < order.length && cards.length < 3; offset += 1) {
+          const key = order[(start + offset) % order.length];
+          if (key !== currentKey) cards.push(key);
+        }
+
+        const cardMeta = {
+          fitness: { image:'assets/fitness-app.webp', position:'center 72%', line:'Product design · UX systems' },
+          'big-fish': { image:'assets/hr-forum-big-fish.avif', position:'center', line:'Art direction · Event identity' },
+          film: { image:'assets/filmcollege-hero.webp', position:'82% center', line:'Brand identity · Digital platform' },
+          beauty: { image:'assets/beauty-ecosystem-system-board.webp', position:'center', line:'Brand identity · Art direction' },
+          romanova: { image:'assets/romanova-source-product-flatlay.webp', position:'center', line:'UI design · Campaign adaptation' },
+          production: { image:'assets/production-decks/subcultures-collage.webp', position:'center', line:'Treatments · Presentation design' }
+        };
+
+        const section = document.createElement('section');
+        section.className = 'related-work';
+        section.setAttribute('aria-labelledby', 'related-work-title');
+        section.innerHTML = `
+          <div class="wrap">
+            <div class="related-work-head">
+              <div><span class="mono">Keep exploring</span><h2 id="related-work-title">Other cases.</h2></div>
+              <p>Three more projects, each with its own problem, system and visual language.</p>
+            </div>
+            <div class="related-work-grid">
+              ${cards.map((key, index) => {
+                const project = caseStudies[key];
+                const meta = cardMeta[key];
+                return `<a class="related-card" href="#case/${key}" data-project="${key}">
+                  <div class="related-card-media"><img src="${meta.image}" alt="${project.title} case preview" loading="lazy" style="object-position:${meta.position}"><span class="related-card-index">${String(index + 1).padStart(2, '0')}</span></div>
+                  <strong>${project.title}</strong><span>${meta.line}</span>
+                </a>`;
+              }).join('')}
+            </div>
+          </div>`;
+
+        const closingCta = root.querySelector('.cs-cta');
+        if (closingCta) closingCta.before(section);
+        else root.append(section);
+      },
+
       showPage(page, updateHistory = true) {
         if (page === 'home') {
           this.caseCleanup?.();
@@ -4902,7 +4826,7 @@
         const project = caseStudies[projectKey];
         if (!project) return;
 
-        const activeCard = document.activeElement?.closest?.('.case-card[data-project]');
+        const activeCard = document.activeElement?.closest?.('a[data-project][href^="#case/"]');
         if (activeCard) this.caseTrigger = activeCard;
         this.caseCleanup?.();
         this.caseCleanup = null;
@@ -4923,6 +4847,7 @@
           document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#f3f1ed');
           csPage.innerHTML = this.fiteraTemplate();
           document.body.insertBefore(csPage, document.querySelector('footer'));
+          this.mountMoreCases(csPage, projectKey);
           window.scrollTo(0, 0);
           this.initFiteraExperience(csPage);
           requestAnimationFrame(() => csPage.querySelector('.back-btn')?.focus({ preventScroll:true }));
@@ -5022,6 +4947,7 @@
             <button class="project-next wrap" type="button" onclick="app.showCaseStudy('${nextKey}')"><div><span>Next project</span><strong>${nextProject.title}</strong></div><i class="project-next-arrow" aria-hidden="true">→</i></button>
           `;
           document.body.insertBefore(csPage, document.querySelector('footer'));
+          this.mountMoreCases(csPage, projectKey);
           window.scrollTo(0, 0);
           this.initEditorialCase(csPage);
           requestAnimationFrame(() => csPage.querySelector('.back-btn')?.focus({ preventScroll:true }));
@@ -5088,7 +5014,7 @@
               <div class="wrap">
                 <div class="beauty-brandbook-head">
                   <div><span class="project-kicker">Brandbook · 37 pages</span><h2>Strategy made usable.</h2></div>
-                  <div><p>The guidelines turn the identity into a working production tool: architecture, logo protection, service palettes, gold treatment, typography, print production and photography direction.</p><span class="beauty-brandbook-open"><span>Browse all 37 pages below</span><b>↓</b></span></div>
+                  <div><p>The guidelines turn the identity into a working production tool: architecture, logo protection, service palettes, gold treatment, typography, print production and photography direction.</p><a class="beauty-brandbook-open" href="assets/beauty-academy-brandbook.pdf" target="_blank" rel="noopener"><span>Open full brandbook</span><b>↗</b></a></div>
                 </div>
                 <div class="beauty-brandbook-reader" data-beauty-brandbook-reader>
                   <div class="beauty-brandbook-toolbar"><span>Complete brandbook · sequential preview</span><div class="beauty-brandbook-controls"><button type="button" data-beauty-brandbook-prev aria-label="Previous brandbook page">←</button><output data-beauty-brandbook-count>01 / 37</output><button type="button" data-beauty-brandbook-next aria-label="Next brandbook page">→</button></div></div>
@@ -5123,6 +5049,7 @@
             <button class="project-next wrap" type="button" onclick="app.showCaseStudy('${nextKey}')"><div><span>Next project</span><strong>${nextProject.title}</strong></div><i class="project-next-arrow" aria-hidden="true">→</i></button>
           `;
           document.body.insertBefore(csPage, document.querySelector('footer'));
+          this.mountMoreCases(csPage, projectKey);
           window.scrollTo(0, 0);
           this.initEditorialCase(csPage);
           const beautyReader = csPage.querySelector('[data-beauty-brandbook-reader]');
@@ -5186,6 +5113,7 @@
           `;
 
           document.body.insertBefore(csPage, document.querySelector('footer'));
+          this.mountMoreCases(csPage, projectKey);
           window.scrollTo(0, 0);
           this.initEditorialCase(csPage);
           requestAnimationFrame(() => csPage.querySelector('.back-btn')?.focus({ preventScroll:true }));
@@ -5220,7 +5148,7 @@
               <div class="production-real-deck-head">
                 <span class="production-real-deck-index">${deck.index} / ${deck.type} · ${deck.slides} slides · EN</span>
                 <div class="production-real-deck-copy"><h3>${deck.title}</h3><p>${deck.copy}</p></div>
-                <span class="production-deck-open">Browse the complete deck below <b>↓</b></span>
+                <a class="production-deck-open" href="assets/production-decks/${deck.pdf}" download>Download original PDF <b>↓</b></a>
               </div>
               <div class="production-deck-reader" data-production-reader>
                 <div class="production-reader-bar">
@@ -5283,6 +5211,7 @@
           `;
 
           document.body.insertBefore(csPage, document.querySelector('footer'));
+          this.mountMoreCases(csPage, projectKey);
           window.scrollTo(0, 0);
           this.initEditorialCase(csPage);
           requestAnimationFrame(() => csPage.querySelector('.back-btn')?.focus({ preventScroll:true }));
@@ -5415,6 +5344,7 @@
           `;
 
           document.body.insertBefore(csPage, document.querySelector('footer'));
+          this.mountMoreCases(csPage, projectKey);
           const filmTabButtons = [...csPage.querySelectorAll('[data-film-tab]')];
           const filmPanel = csPage.querySelector('#film-admission-panel');
           const filmPanelTitle = csPage.querySelector('[data-film-panel-title]');
@@ -5527,6 +5457,7 @@
         `;
 
         document.body.insertBefore(csPage, document.querySelector('footer'));
+        this.mountMoreCases(csPage, projectKey);
         window.scrollTo(0, 0);
         this.initEditorialCase(csPage);
         requestAnimationFrame(() => csPage.querySelector('.back-btn')?.focus({ preventScroll:true }));
@@ -5818,12 +5749,46 @@
         const navSections = [...root.querySelectorAll('[data-fit-jump]')]
           .map(button => root.querySelector(`#${button.dataset.fitJump}`))
           .filter(Boolean);
-        const navObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          root.querySelectorAll('[data-fit-jump]').forEach(button => button.classList.toggle('is-active', button.dataset.fitJump === entry.target.id));
-        }), { threshold: .2, rootMargin: '-25% 0px -60% 0px' });
-        navSections.forEach(section => navObserver.observe(section));
-        cleanupFns.push(() => navObserver.disconnect());
+        const navButtons = [...root.querySelectorAll('[data-fit-jump]')];
+        let navFrame = 0;
+        const syncActiveNav = () => {
+          navFrame = 0;
+          if (!navSections.length) return;
+          const atDocumentEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+          let activeSection = navSections[0];
+          if (atDocumentEnd) {
+            activeSection = navSections[navSections.length - 1];
+          } else {
+            const activationLine = window.innerHeight * .32;
+            navSections.forEach(section => {
+              if (section.getBoundingClientRect().top <= activationLine) activeSection = section;
+            });
+          }
+          navButtons.forEach(button => {
+            const isActive = button.dataset.fitJump === activeSection.id;
+            button.classList.toggle('is-active', isActive);
+            if (isActive) button.setAttribute('aria-current', 'location');
+            else button.removeAttribute('aria-current');
+          });
+        };
+        const requestNavSync = () => {
+          if (!navFrame) navFrame = requestAnimationFrame(syncActiveNav);
+        };
+        window.addEventListener('scroll', requestNavSync, { passive:true });
+        window.addEventListener('resize', requestNavSync);
+        window.addEventListener('pageshow', requestNavSync);
+        const navSyncTimers = [80, 320, 800].map(delay => setTimeout(requestNavSync, delay));
+        const navResizeObserver = 'ResizeObserver' in window ? new ResizeObserver(requestNavSync) : null;
+        navResizeObserver?.observe(root);
+        cleanupFns.push(() => {
+          window.removeEventListener('scroll', requestNavSync);
+          window.removeEventListener('resize', requestNavSync);
+          window.removeEventListener('pageshow', requestNavSync);
+          navSyncTimers.forEach(timer => clearTimeout(timer));
+          navResizeObserver?.disconnect();
+          if (navFrame) cancelAnimationFrame(navFrame);
+        });
+        syncActiveNav();
 
         const journeyBoard = root.querySelector('[data-journey-board]');
         if (journeyBoard) {
@@ -8176,7 +8141,7 @@
   </script>
   <script>
     document.addEventListener('click', function (event) {
-      const card = event.target.closest?.('.case-card[data-project]');
+      const card = event.target.closest?.('a[data-project][href^="#case/"]');
       if (!card || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       app.showCaseStudy(card.dataset.project);
